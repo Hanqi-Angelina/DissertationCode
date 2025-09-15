@@ -10,7 +10,7 @@ Confidential datasets and large raw files have also been removed to maintain a c
 
 # General Structure
 This is the general project structure, with the names of removed files included for clarity:
-
+```
 sim_eval/
 |-- configs/
 |   |-- lahme2.yml
@@ -54,3 +54,4 @@ sim_eval/
 |-- simulation_scenarios.py   # seven evaluation scenarios
 |-- test_scenarios.py         # convert true DAG to graph 
 \-- ...                       # worker scripts and misc. files
+```
