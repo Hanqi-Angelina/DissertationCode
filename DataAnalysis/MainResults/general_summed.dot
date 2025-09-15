@@ -1,0 +1,53 @@
+digraph {
+MistrustC [color = blue]; L1 [color = red]; Images [color = blue]; Control [color = blue]; NegativeSelf [color = blue]; Reasoning [color = blue]; Strangeness [color = blue]; PositiveSelf [color = blue]; AnxietySensitivity [color = blue]; MistrustB [color = blue]; Worry [color = blue]; EverydayAnxiety [color = blue]; SocialAnxiety [color = blue]; Sleep [color = blue]; MistrustA [color = blue]; Hallucinations [color = blue]; L2 [color = red]; 
+subgraph Undirected {
+edge [dir=none, color=black]
+}
+
+subgraph Directed {
+edge [color=black]
+Images -> L1
+Images -> L2
+L2 -> Sleep
+Images -> Worry
+L1 -> MistrustC
+SocialAnxiety -> L1
+SocialAnxiety -> L2
+SocialAnxiety -> Worry
+L2 -> MistrustC
+PositiveSelf -> L1
+PositiveSelf -> L2
+AnxietySensitivity -> L1
+PositiveSelf -> Worry
+AnxietySensitivity -> L2
+Worry -> MistrustA
+AnxietySensitivity -> Worry
+EverydayAnxiety -> L1
+EverydayAnxiety -> L2
+Hallucinations -> L1
+Worry -> MistrustB
+EverydayAnxiety -> Worry
+Hallucinations -> L2
+Hallucinations -> Worry
+Control -> L1
+Control -> L2
+Control -> Worry
+Worry -> Sleep
+NegativeSelf -> L1
+NegativeSelf -> L2
+NegativeSelf -> Worry
+L1 -> MistrustA
+Reasoning -> L1
+Reasoning -> L2
+Reasoning -> Worry
+L1 -> MistrustB
+Worry -> MistrustC
+L2 -> MistrustA
+L1 -> Sleep
+L2 -> MistrustB
+Strangeness -> L1
+Strangeness -> L2
+Strangeness -> Worry
+}
+
+}

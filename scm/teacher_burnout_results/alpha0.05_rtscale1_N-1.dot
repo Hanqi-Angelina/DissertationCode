@@ -1,0 +1,67 @@
+digraph {
+L10 [color = red]; X_SS2 [color = blue]; L1 [color = red]; X_SE1 [color = blue]; X_ELC2 [color = blue]; X_DM2 [color = blue]; X_CC3 [color = blue]; X_CC2 [color = blue]; X_PA2 [color = blue]; X_RC1 [color = blue]; X_DM1 [color = blue]; L9 [color = red]; X_RA2 [color = blue]; X_CC1 [color = blue]; X_SE3 [color = blue]; X_EE3 [color = blue]; X_ELC3 [color = blue]; X_ELC5 [color = blue]; L4 [color = red]; L8 [color = red]; X_PS1 [color = blue]; L5 [color = red]; X_SS1 [color = blue]; X_EE2 [color = blue]; X_RA1 [color = blue]; L2 [color = red]; X_WO1 [color = blue]; X_SE2 [color = blue]; L7 [color = red]; X_DP2 [color = blue]; L6 [color = red]; X_WO2 [color = blue]; X_PS2 [color = blue]; X_DP1 [color = blue]; X_EE1 [color = blue]; X_PA1 [color = blue]; X_ELC1 [color = blue]; X_ELC4 [color = blue]; L3 [color = red]; X_PA3 [color = blue]; X_RC2 [color = blue]; X_CC4 [color = blue]; 
+subgraph Undirected {
+edge [dir=none, color=black]
+}
+
+subgraph Directed {
+edge [color=black]
+L2 -> X_ELC4
+L6 -> X_PA1
+L5 -> X_DM1
+L5 -> X_DM2
+L3 -> L2
+L7 -> X_RA1
+X_WO1 -> X_EE2
+L3 -> L1
+L7 -> X_RA2
+L10 -> L1
+L4 -> X_CC1
+L6 -> X_EE2
+L9 -> X_DP2
+X_SS1 -> X_SS2
+L9 -> X_DP1
+X_WO1 -> X_PA2
+L10 -> X_WO2
+L6 -> L9
+X_SS1 -> X_PS2
+X_WO2 -> L2
+L2 -> X_ELC3
+L6 -> X_PA2
+L4 -> X_CC3
+L3 -> X_SE2
+L3 -> X_SE3
+L7 -> X_PS1
+L1 -> L6
+L2 -> X_ELC2
+L3 -> X_SE1
+L8 -> X_WO1
+L3 -> X_SS1
+L2 -> X_ELC5
+L10 -> X_SS1
+L4 -> X_CC2
+L6 -> X_PA3
+X_WO1 -> X_EE3
+X_WO1 -> X_EE1
+X_PS2 -> X_PS1
+L10 -> L8
+L4 -> X_CC4
+L6 -> X_EE1
+X_WO2 -> X_DM1
+L8 -> L7
+L6 -> X_EE3
+L10 -> X_RC1
+X_WO2 -> X_DM2
+X_WO1 -> X_RC2
+L8 -> L2
+X_WO1 -> L4
+L10 -> L9
+X_SS1 -> L6
+L1 -> X_SS2
+L6 -> L4
+L1 -> X_PS2
+L2 -> X_ELC1
+L6 -> X_RC2
+}
+
+}

@@ -1,0 +1,41 @@
+digraph {
+Socialsupport [color = blue]; defences2 [color = blue]; Worry [color = blue]; Control [color = blue]; Sleep [color = blue]; Images [color = blue]; household_income [color = blue]; Hallucinations [color = blue]; Age [color = blue]; Strangeness [color = blue]; NegativeSelf [color = blue]; AnxietySensitivity [color = blue]; RGPTSB [color = blue]; GPTSPARTA [color = blue]; PositiveSelf [color = blue]; 
+subgraph Undirected {
+edge [dir=none, color=black]
+Hallucinations -> Images
+RGPTSB -> GPTSPARTA
+RGPTSB -> Images
+RGPTSB -> Hallucinations
+}
+
+subgraph Directed {
+edge [color=black]
+Images -> Strangeness
+defences2 -> Strangeness
+PositiveSelf -> Control
+Strangeness -> AnxietySensitivity
+GPTSPARTA -> Age
+defences2 -> AnxietySensitivity
+GPTSPARTA -> defences2
+AnxietySensitivity -> Sleep
+RGPTSB -> Strangeness
+Strangeness -> Worry
+PositiveSelf -> Socialsupport
+Strangeness -> NegativeSelf
+Images -> NegativeSelf
+PositiveSelf -> NegativeSelf
+Worry -> Sleep
+GPTSPARTA -> AnxietySensitivity
+AnxietySensitivity -> Control
+Hallucinations -> defences2
+RGPTSB -> Worry
+RGPTSB -> NegativeSelf
+GPTSPARTA -> Worry
+defences2 -> Age
+Worry -> PositiveSelf
+Worry -> Control
+AnxietySensitivity -> Worry
+NegativeSelf -> Sleep
+}
+
+}

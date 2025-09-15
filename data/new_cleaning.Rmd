@@ -1,0 +1,461 @@
+---
+title: "Data Cleaning"
+output: html_notebook
+---
+This code chunk consists of codes provided together with the dataset. 
+```{r copied original code}
+library(tidyverse)
+library(dplyr)
+
+source("correct_coding.R") #source the file with helper functions
+
+dat2 <- foreign::read.spss("Oxford Trust Survey_FINAL DATA_adj2.sav")  # insert link to file
+dat2 <- as_tibble(dat2)
+
+dat2s <- dat2 %>% 
+  select(RGPTSB:defences2)
+
+dat2 %>% select(where(~is.ordered(.)))
+sapply(dat2, class)
+
+dat2sl <- dat2s %>% pivot_longer(everything())
+
+dat2 <- dat2 %>% 
+  mutate(across(where(~is.factor(.)), correct_coding)) %>%
+  mutate(across(Q74_1:Q75_10, ~(`levels<-`(., 0:4))))
+
+dat2 <- dat2 %>% 
+  mutate(across(Q72_1:Q90_3, as.ordered)) %>%
+  mutate(across(Q93_1:Q106, as.ordered)) %>%
+  mutate(across(starts_with("Q108_") | starts_with("Q111_"), as.ordered))
+
+ox_trust <- dat2
+# rm(dat2)
+
+ox_trust_sum <- dat2s
+rm(dat2s)
+
+# usethis::use_data(ox_trust)
+# usethis::use_data(ox_trust_sum)
+
+## factor analysis (structure) 
+```
+
+An overview of questions first:
+
+```{r}
+colnames(ox_trust)
+```
+The cleaning needed (diagnosis, etc. making into binary)
+
+```{r}
+# List relationships here
+latent_indicator_dict = list(
+  RGPTSB = grep("^Q75", names(ox_trust), value = TRUE),
+  GPTSPARTA = grep("^Q74", names(ox_trust), value = TRUE), 
+  Worry = grep("^Q72", names(ox_trust), value = TRUE), 
+  Sleep = c(grep("^Q95", names(ox_trust), value = TRUE), 
+            grep("^Q96", names(ox_trust), value = TRUE), 
+            grep("^Q98", names(ox_trust), value = TRUE), 
+            grep("^Q99", names(ox_trust), value = TRUE), 
+            grep("^Q100", names(ox_trust), value = TRUE)),
+  SocialSupport = grep("^Q111", names(ox_trust), value = TRUE), 
+  Control = grep("^Q102", names(ox_trust), value = TRUE), 
+  AnxietySensitivity = grep("^Q93", names(ox_trust), value = TRUE), 
+  Hallucinations = grep("^Q89", names(ox_trust), value = TRUE), 
+  Images = grep("^Q90", names(ox_trust), value = TRUE), 
+  Strangeness = grep("^Q88", names(ox_trust), value = TRUE), 
+  defences2 = grep("^Q85", names(ox_trust), value = TRUE)
+)
+data.frame(
+  Group = names(latent_indicator_dict),
+  NumItems = sapply(latent_indicator_dict, length)
+)
+sum(sapply(latent_indicator_dict, length)) # 106 items, still have many 
+group_cols <- lapply(latent_indicator_dict, function(cols) intersect(cols, names(ox_trust)))
+```
+Duration checked, okay
+
+```{r change names}
+ox_trust = ox_trust %>%
+  rename(Duration = Duration__in_seconds_, 
+         Age = Q112, 
+         Gender = Q3, 
+         Ethnicity = Q116, 
+         Annual_Income = Q5, 
+         Martial_Status = Q6, 
+         Employment = Q8, 
+         Region = Q9, 
+         Mental = Q11, 
+         Diagnosis = Q12, 
+         MistrustC_1 = Q77)%>%
+  rename_with(~ gsub("^Q72", "Worry", .x), starts_with("Q72"))%>%
+  rename_with(~ gsub("^Q74", "MistrustA", .x), starts_with("Q74"))%>%
+  rename_with(~ gsub("^Q75", "MistrustB", .x), starts_with("Q75"))
+
+ox_trust = ox_trust%>%
+  rename_with(
+    ~ {
+      nums <- as.integer(sub("^Q115_(\\d+)$", "\\1", .x))
+      paste0("MistrustC_", nums + 1)
+    },
+    matches("^Q115_\\d+$")
+  )%>%
+  rename(MistrustC_7 = Q83, 
+         MistrustC_8 = Q84)%>%
+  rename_with(~ gsub("^Q85", "DefenceBehavior", .x), starts_with("Q85"))%>%
+  rename_with(~ gsub("^Q86", "PositiveSelf", .x), starts_with("Q86"))%>%
+  rename_with(~ gsub("^Q87", "NegativeSelf", .x), starts_with("Q87"))%>%
+  rename_with(~ gsub("^Q88", "Strangeness", .x), starts_with("Q88"))%>%
+  rename_with(~ gsub("^Q89", "Hearing", .x), starts_with("Q89"))%>%
+  rename_with(~ gsub("^Q90", "Images", .x), starts_with("Q90"))%>%
+  rename_with(~ gsub("^Q92", "Experiencing", .x), starts_with("Q92"))%>%
+  rename_with(~ gsub("^Q93", "AnxietySensitivity", .x), starts_with("Q93"))%>%
+  rename_with(~ gsub("^Q24_2", "EverydayAnxiety", .x), starts_with("Q24_2"))%>%
+  select(-starts_with("Q24_1"))%>% # have numeric ones, no need for yes/no 
+  rename_with(~ gsub("^Q94", "Reasoning", .x), starts_with("Q94"))%>%
+  rename_with(.fn = function(x) {
+      idx <- seq_along(x)
+      paste0("Sleep_", idx)
+    },.cols = matches("^Q(9[5-9]|100)(_\\d+)?$"))
+  
+ox_trust = ox_trust %>%
+  rename_with(~ gsub("^Q101", "SocialAnxiety", .x), starts_with("Q101"))%>%
+  rename_with(~ gsub("^Q102", "Control", .x), starts_with("Q102"))%>%
+  rename_with(.fn = function(x) {
+    idx <- seq_along(x)
+    paste0("Alcohol_", idx)
+    },.cols = matches("^Q(10[3-5])$"))%>%
+  rename(Cannabis = Q106)%>%
+  rename_with(~ gsub("^Q107", "Discrimmination", .x), starts_with("Q107"))%>%
+  rename_with(~ gsub("^Q108", "Stressful", .x), starts_with("Q108"))%>%
+  rename_with(~ gsub("^Q109", "ChildBullying", .x), starts_with("Q109"))%>%
+  rename_with(~ gsub("^Q110", "ChildTreatment", .x), starts_with("Q110"))%>%
+  rename_with(~ gsub("^Q111", "SocialSupport", .x), starts_with("Q111"))%>%
+  select(-SC0)
+```
+
+```{r check orders}
+# columns of ordered factors
+ix <- sapply(ox_trust, is.ordered)
+
+# List their levels in order
+orders <- lapply(ox_trust[ix], levels) # print to inspect
+
+ix <- sapply(ox_trust, function(x) is.factor(x) && "x0" %in% levels(x))
+which(ix) # basically only hearing, images and cannabis are affected, others are good to go
+```
+Three places with x0, but x0 refers to the highest category (after checked with the survey) so is fine
+
+$Images_3
+[1] "Not at all"           "Rarely"               "Once a month"         "Once a week"         
+[5] "Several times a week" "x0"  
+
+$Cannabis
+[1] "Prefer not to answer" "Never"                "Monthly or less"      "2-4 times a month"   
+[5] "2-3 times a week"     "x0"   
+
+$Hearing 
+[1] "Not at all"           "Rarely"               "Once a month"         "Once a week"         
+[5] "Several times a week" "x0" 
+
+```{r factor starting at 0 preference and NA}
+ox_trust_ordered = ox_trust%>%
+  mutate(across(where(is.ordered), ~ as.integer(.) - 1))
+
+matches <- sapply(ox_trust, function(x) grepl("Prefer", x)) # include prefer not to answer
+names(ox_trust)[unique(which(matches, arr.ind = TRUE)[,2])]
+
+ix <- sapply(ox_trust_ordered, anyNA)
+names(ox_trust_ordered)[ix]
+```
+```{r binary and income}
+ox_trust_ordered <- ox_trust_ordered %>%
+  mutate(across(
+    where(~ all(.x %in% c("Yes", "No"))), # only mutate those all in yes/no (do not do if exits "prefer not to say")
+    ~ ifelse(.x == "Yes", 1, 0)
+  ))
+# Annual income
+levels(ox_trust_ordered$Annual_Income) # prefer not to say is the highest, remove it
+ox_trust_ordered <- ox_trust_ordered%>%
+  mutate(household_income = ifelse(Annual_Income == "Prefer not to say", NA, as.integer(Annual_Income)))
+unique(ox_trust_ordered$Annual_Income)
+unique(ox_trust_ordered$household_income) # confirmed here
+```
+
+```{r mental diagnosis}
+ox_trust_ordered <- ox_trust_ordered%>%
+  mutate(across(matches("^Q13_([1-5]|7)"), function(x) case_when(Diagnosis == "Prefer not to answer" ~ NA, 
+                                                                 Diagnosis == "Yes" ~ as.integer(!is.na(x)), 
+                                                                 Diagnosis == "No" ~ 0)))%>%
+  select(!Q13_6)%>%
+  rename(Depression = Q13_1, 
+         Anxiety = Q13_2, 
+         Schizophrenia = Q13_3 , 
+         Bipolar = Q13_4, 
+         Eating = Q13_5, 
+         Other = Q13_7)
+ox_trust_ordered <- ox_trust_ordered%>%
+  mutate(Mental = case_when(Mental == "Prefer not to answer" ~ NA,
+                            Mental == "Yes" ~ 1,
+                            Mental == "No" ~ 0))%>%
+  mutate(Diagnosis = case_when(Diagnosis == "Prefer not to answer" ~ NA, 
+                            Diagnosis == "Yes" ~ 1, 
+                            Diagnosis == "No" ~ 0))
+unique(ox_trust_ordered$Depression)
+```
+
+```{r alcohol}
+# unique(ox_trust_ordered$Cannabis)
+# unique(ox_trust$Cannabis) # Cannabis contains x0, leave it out
+# unique(ox_trust$Alcohol_1)
+# unique(ox_trust_ordered$Alcohol_1) 
+# unique(ox_trust$Alcohol_2) 
+# unique(ox_trust_ordered$Alcohol_2) 
+# unique(ox_trust$Alcohol_3) 
+# unique(ox_trust_ordered$Alcohol_3) 
+ox_trust_ordered = ox_trust_ordered%>%
+  mutate(Alcohol_2 = ifelse(Alcohol_1 == 0, 0, Alcohol_2), 
+         Alcohol_3 = ifelse(Alcohol_1 == 0, 0, Alcohol_3))
+# unique(ox_trust_ordered$Alcohol_2) 
+# unique(ox_trust_ordered$Alcohol_3) # check no missing values now
+```
+
+
+```{r factor relevel}
+ox_trust_ordered = ox_trust_ordered%>%
+  mutate(across(starts_with("Reasoning_")|starts_with("Control_")|
+                  starts_with("SocialSupport_"), ~ as.integer(.) + 1)) # add one to start at 1
+# count the stressful events
+ox_trust_ordered = ox_trust_ordered%>%
+  mutate(across(starts_with("Stressful_"), ~ as.integer(!is.na(.))))
+```
+
+```{r summing}
+LatentsRelated = ox_trust_ordered[c(17:206, 211:249)] # remove the alcohol to sum latents
+# names(LatentsRelated)
+prefixes <- sub("_.*", "", names(LatentsRelated))
+df_sums <- sapply(split(names(LatentsRelated), prefixes), function(cols) rowSums(LatentsRelated[cols], na.rm = TRUE))
+df_counts <- tibble(prefix = prefixes) %>%
+  count(prefix, name = "count") 
+knitr::kable(df_counts) # check if align with survey
+
+df_sums = as_tibble(df_sums)
+# match the terms here: 
+all(ox_trust_sum$RGPTSB == df_sums$MistrustB)
+all(ox_trust_sum$Worry == df_sums$Worry)
+all(ox_trust_sum$GPTSPARTA == df_sums$MistrustA)
+all(ox_trust_sum$PositiveSelf == df_sums$PositiveSelf)
+all(ox_trust_sum$NegativeSelf == df_sums$NegativeSelf)
+all(ox_trust_sum$Sleep == df_sums$Sleep)
+all(ox_trust_sum$Socialsupport == df_sums$SocialSupport)
+all(ox_trust_sum$Control == df_sums$Control)
+all(ox_trust_sum$AnxietySensitivity == df_sums$AnxietySensitivity)
+all(ox_trust_sum$Hallucinations == df_sums$Hearing) #seems have something to do with x0, will use the results in ox_trust
+all(ox_trust_sum$Images == df_sums$Images) #same as above
+all(ox_trust_sum$Strangeness == df_sums$Strangeness)
+all(ox_trust_sum$defences2 == df_sums$DefenceBehavior)
+unique(dat2$Q89_1) 
+unique(dat2$Q90_1) # The other parts should be solid as they do not contain x0 so is unaffected
+```
+Duration > 300 seconds for all responses, do not delete any responses. 
+for Q92, yes = 1, no = 0
+Q24_1 and Q24_2 is the different dimensions of the same info, use the ordinal one only (Q24_2).
+Q106 contain "Prefer not to answer", count as missing data if used. 
+Q108: count the number of stressful events for simplicity
+Q109: Yes = 1, No = 0
+Similarly for Q110. 
+
+```{r}
+# check for NAs
+names(which(sapply(LatentsRelated, anyNA)))
+```
+No missing values for LatentRelated variables. 
+
+### Sample Data for Evaluation
+```{r}
+df_sums = df_sums %>%
+  select(!c(1, 4, 5, 9:12, 14, 15, 17, 19, 20, 22))
+ox_with_sum = cbind(ox_trust_ordered, df_sums)
+# can do a drop NA here and then check the demographics, ask if needed first
+ox_with_sum = ox_with_sum%>%
+  select(c(2,9:91, 106:209, 211:272))
+names(which(sapply(ox_with_sum, anyNA)))
+colSums(is.na(ox_with_sum[names(which(sapply(ox_with_sum, anyNA)))]))
+ox_with_sum = ox_with_sum%>%
+  tidyr::drop_na() #drop all NAs for analysis, all analysis will be built upon this dataset then.
+which(lapply(ox_with_sum, function(x) is.numeric(x)) == FALSE) #check all numeric
+ox_original = ox_with_sum[c(2:227)]
+# write_csv(ox_original, "original_data.csv")
+# check which terms are summed to get ox_trust_sum
+summary(ox_original)
+hist(ox_original$Worry_10)
+hist(ox_original$MistrustA_3)
+hist(ox_original$MistrustB_8)
+hist(ox_original$MistrustA_3)
+hist(ox_original$MistrustC_1)
+hist(ox_original$DefenceBehavior_3)
+hist(ox_original$PositiveSelf_3)
+hist(ox_original$NegativeSelf_3)
+hist(ox_original$Strangeness_2)
+hist(ox_original$Experiencing_20)
+hist(ox_original$AnxietySensitivity_3)
+hist(ox_original$EverydayAnxiety_4)
+hist(ox_original$Reasoning_7)
+hist(ox_original$Sleep_5)
+hist(ox_original$SocialAnxiety_13)
+hist(ox_original$Discrimmination_5)
+hist(ox_original$Stressful_6)
+hist(ox_original$ChildBullying_7)
+hist(ox_original$ChildTreatment_2)
+hist(ox_original$SocialSupport_9)
+
+# check asymmetry here
+library(moments)
+
+skew1 = lapply(ox_original[-c(1:8)], skewness)%>%
+  as_tibble()%>%
+  pivot_longer(cols = c(1:218), names_to = "Name", values_to = "Skewness")
+kurt1 = lapply(ox_original[-c(1:8)], kurtosis)%>%
+  as_tibble()%>%
+  pivot_longer(cols = c(1:218), names_to = "Name", values_to = "Kurtosis")
+skew_tab = inner_join(skew1, kurt1, by = "Name")
+rm(skew1)
+rm(kurt1)
+skew_tab%>%
+  arrange(desc(Skewness)) #Binary ones most skewed
+
+is_binary <- sapply(ox_original, function(x) all((x == 0)| (x==1)))
+binary_df <- ox_original[,is_binary]
+
+as_tibble(lapply(binary_df, mean))%>%
+  pivot_longer(cols = c(1:64), values_to = "Mean", names_to = "Name")%>%
+  arrange(desc(Mean))
+```
+
+### Summarized Data 
+```{r}
+# select all columns in the ox_trust_sum
+names(ox_trust_sum)
+original_summed_age_household = ox_with_sum%>%
+  select(names(ox_trust_sum), Age, household_income)
+# summary(original_summed_age_household)
+summary(original_summed_age_household$Age)
+original_summed_age_household = original_summed_age_household%>%
+  mutate_all(function(x) (x-mean(x))/sd(x))
+# write_csv(original_summed_age_household, "summed_demo.csv")
+data = ox_with_sum[c(1,228:250)]
+skew1 = lapply(data, skewness)%>%
+  as_tibble()%>%
+  pivot_longer(cols = c(1:24), names_to = "Name", values_to = "Skewness")
+kurt1 = lapply(data, kurtosis)%>%
+  as_tibble()%>%
+  pivot_longer(cols = c(1:24), names_to = "Name", values_to = "Kurtosis")
+skew_tab = inner_join(skew1, kurt1, by = "Name")
+rm(skew1)
+rm(kurt1)
+skew_tab%>%
+  arrange(desc(Skewness))
+
+# summary(data)
+data = data%>%
+  mutate_all(function(x) (x-mean(x))/sd(x)) # standardize sum data and approximately numeric data
+names(data)
+# lapply(data, sd)
+# write_csv(data, "summed_all.csv")
+```
+
+### Applying some benchmark algorithms
+
+#### PC 
+Both PC and GES works well if there is no hidden variables 
+
+```{r}
+library(pcalg)
+demo_sum_df = original_summed_age_household%>%
+  mutate_all(function(x) (x-mean(x))/sd(x))
+var_names1 = colnames(demo_sum_df)
+suffStat1 = list(C = cor(demo_sum_df), n = nrow(demo_sum_df))
+pc_fit = pc(
+  suffStat1,
+  indepTest = gaussCItest,
+  labels = var_names1,
+  alpha = 0.001, 
+  solve.confl = T
+)
+plot(pc_fit, main = "PC Estimated CPDAG (Small)", cex.axis = 1.3)
+```
+
+#### GES
+
+```{r}
+score = new("GaussL0penObsScore", data = data)
+
+# Run the GES algorithm
+ges_fit = ges(
+  score = score
+)
+plot(ges_fit$essgraph)
+
+score = new("GaussL0penObsScore", data = demo_sum_df)
+ges_fit = ges(
+  score = score
+)
+plot(ges_fit$essgraph)
+```
+
+#### FCI
+
+Can provide some insight into existence of latent confounders (e.g., bi-directed edges)
+```{r}
+summed_main = data%>%
+  select(AnxietySensitivity, SocialAnxiety, EverydayAnxiety, Hallucinations, Images, 
+         Control, NegativeSelf, Reasoning, Strangeness, PositiveSelf, Worry, Sleep, 
+         MistrustC, GPTSPARTA, RGPTSB)
+suffStat_main = list(C = cor(summed_main), n = nrow(summed_main))
+vars_main = names(summed_main)
+fci_pag_small <- fci(suffStat_main, gaussCItest, alpha = 0.001, labels = vars_main, verbose = F)
+plot(fci_pag_small)
+
+pdf("fci_graph.pdf")   # or use png("fci_graph.png", width=800, height=600)
+plot(fci_pag_small)
+dev.off()
+
+```
+Exists bidirected paths, suggesting existence of latent confounders.
+
+```{r}
+decode_edges <- function(fci_obj) {
+  amat <- fci_obj@amat
+  p <- nrow(amat)
+  labs <- colnames(amat)
+  out <- list()
+  k <- 1
+
+  for (i in 1:(p-1)) {
+    for (j in (i+1):p) {
+      a <- amat[i,j]
+      b <- amat[j,i]
+
+      if (a==2 && b==3) {            # i tail, j arrow
+        out[[k]] <- data.frame(edge=sprintf("%s --> %s", labs[i], labs[j]))
+      } else if (a==3 && b==2) {     # i arrow, j tail
+        out[[k]] <- data.frame(edge=sprintf("%s --> %s", labs[j], labs[i]))
+      } else if (a==2 && b==2) {     # both tails
+        out[[k]] <- data.frame(edge=sprintf("%s <-> %s", labs[i], labs[j]))
+      } else if (a==1 && b==3) {     # i circle, j arrow
+        out[[k]] <- data.frame(edge=sprintf("%s --o %s", labs[i], labs[j]))
+      } else if (a==0 && b==0) {     # no edge
+        # skip, or keep if you want explicit "no edge"
+        # out[[k]] <- data.frame(edge=sprintf("%s     %s", labs[i], labs[j]))
+      }
+      if (length(out) > 0) k <- k+1
+    }
+  }
+  if (length(out)>0) do.call(rbind, out) else data.frame(edge=character())
+}
+
+edges <- decode_edges(fci_pag_small)
+print(edges)
+```
+

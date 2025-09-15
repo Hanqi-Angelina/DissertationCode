@@ -1,0 +1,93 @@
+digraph {
+Worry_9 [color = blue]; Sleep_5 [color = blue]; MistrustB_7 [color = blue]; Sleep_2 [color = blue]; L10 [color = red]; MistrustB_9 [color = blue]; L5 [color = red]; MistrustB_10 [color = blue]; MistrustB_6 [color = blue]; Worry_4 [color = blue]; Sleep_7 [color = blue]; MistrustB_1 [color = blue]; L2 [color = red]; MistrustB_3 [color = blue]; Sleep_1 [color = blue]; MistrustB_8 [color = blue]; L1 [color = red]; Worry_10 [color = blue]; MistrustB_2 [color = blue]; MistrustB_5 [color = blue]; Worry_1 [color = blue]; Worry_5 [color = blue]; L6 [color = red]; Worry_6 [color = blue]; Worry_2 [color = blue]; Worry_3 [color = blue]; MistrustB_4 [color = blue]; L8 [color = red]; Sleep_6 [color = blue]; Sleep_3 [color = blue]; Sleep_4 [color = blue]; L3 [color = red]; L7 [color = red]; Worry_8 [color = blue]; L9 [color = red]; L4 [color = red]; Worry_7 [color = blue]; 
+subgraph Undirected {
+edge [dir=none, color=black]
+}
+
+subgraph Directed {
+edge [color=black]
+L8 -> Worry_4
+L5 -> Worry_8
+L10 -> Sleep_6
+Sleep_7 -> L1
+L9 -> MistrustB_5
+L6 -> Worry_10
+MistrustB_5 -> MistrustB_7
+L4 -> L9
+L10 -> Sleep_5
+L2 -> Sleep_2
+L3 -> MistrustB_4
+L7 -> MistrustB_7
+L10 -> Sleep_1
+Sleep_7 -> Worry_3
+L6 -> MistrustB_5
+Worry_8 -> Sleep_5
+Worry_7 -> Worry_5
+L5 -> Worry_5
+Worry_8 -> Sleep_3
+MistrustB_5 -> MistrustB_4
+L6 -> L7
+Worry_10 -> Worry_5
+L7 -> MistrustB_2
+Worry_1 -> Worry_4
+L2 -> Sleep_4
+L9 -> L3
+L10 -> Sleep_3
+L1 -> Worry_6
+L2 -> Sleep_1
+L4 -> L6
+L3 -> MistrustB_6
+L7 -> MistrustB_8
+L3 -> MistrustB_2
+L7 -> MistrustB_1
+Worry_7 -> Worry_9
+L4 -> L1
+L8 -> Worry_2
+MistrustB_5 -> MistrustB_2
+Sleep_7 -> Worry_7
+L7 -> MistrustB_3
+Worry_1 -> Worry_2
+L3 -> MistrustB_8
+L7 -> MistrustB_6
+Worry_7 -> Worry_1
+L2 -> Sleep_6
+L7 -> MistrustB_9
+L4 -> Worry_3
+Worry_8 -> Sleep_2
+L3 -> MistrustB_1
+L2 -> Sleep_5
+L2 -> Sleep_3
+MistrustB_5 -> MistrustB_8
+L3 -> MistrustB_3
+Worry_10 -> Worry_1
+L9 -> Worry_10
+L6 -> L3
+L3 -> MistrustB_9
+MistrustB_5 -> MistrustB_1
+L7 -> MistrustB_10
+Worry_7 -> Worry_8
+MistrustB_5 -> MistrustB_3
+L4 -> Sleep_7
+L5 -> Worry_9
+MistrustB_5 -> MistrustB_6
+L10 -> Sleep_4
+L10 -> Sleep_2
+MistrustB_5 -> MistrustB_9
+L5 -> Worry_1
+Worry_8 -> Sleep_6
+Worry_8 -> Sleep_4
+Sleep_7 -> L9
+L3 -> MistrustB_10
+Worry_10 -> Worry_8
+L9 -> L7
+Worry_10 -> Worry_9
+L1 -> Worry_7
+Worry_8 -> Sleep_1
+Sleep_7 -> L6
+MistrustB_5 -> MistrustB_10
+L3 -> MistrustB_7
+L7 -> MistrustB_4
+Sleep_7 -> Worry_6
+}
+
+}

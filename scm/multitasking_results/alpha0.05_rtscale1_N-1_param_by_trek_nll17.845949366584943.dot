@@ -1,0 +1,37 @@
+digraph G {
+X_Error_Number [color=blue];
+X_Error_Figure [color=blue];
+L3 [color=red];
+L1 [color=red];
+X_Speed_Letter [color=blue];
+X_AverageQus_Par2 [color=blue];
+X_AverageQus_Par3 [color=blue];
+L4 [color=red];
+X_AverageQus_Par1 [color=blue];
+X_Speed_Figure [color=blue];
+L2 [color=red];
+X_Error_Letter [color=blue];
+X_Speed_Number [color=blue];
+subgraph Undirected {
+edge [color=black, dir=none];
+}
+
+subgraph Directed {
+edge [color=black];
+L3 -> L1  [color=black, fontcolor=black, label=5.28, penwidth=5];
+L3 -> X_Speed_Letter  [color=black, fontcolor=black, label=4.94, penwidth=5];
+L3 -> X_Speed_Number  [color=black, fontcolor=black, label=6.16, penwidth=5];
+L1 -> L4  [color=black, fontcolor=black, label=-0.16, penwidth=1];
+L1 -> X_AverageQus_Par1  [color=black, fontcolor=black, label=-2.56, penwidth=5];
+L1 -> L2  [color=black, fontcolor=black, label=-0.44, penwidth=3];
+X_Speed_Letter -> X_Speed_Figure  [color=black, fontcolor=black, label=-8.35, penwidth=5];
+L4 -> X_AverageQus_Par2  [color=black, fontcolor=black, label=-3.37, penwidth=5];
+L4 -> X_AverageQus_Par3  [color=black, fontcolor=black, label=-68.56, penwidth=5];
+L2 -> X_Error_Number  [color=black, fontcolor=black, label=0.68, penwidth=4];
+L2 -> X_Error_Figure  [color=black, fontcolor=black, label=0.69, penwidth=4];
+L2 -> X_Error_Letter  [color=black, fontcolor=black, label=0.72, penwidth=4];
+X_Speed_Number -> L4  [color=black, fontcolor=black, label=0.25, penwidth=2];
+X_Speed_Number -> X_Speed_Figure  [color=black, fontcolor=black, label=2.58, penwidth=5];
+}
+
+}
