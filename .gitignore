@@ -2,6 +2,7 @@
 .RData
 .Rhistory
 .Rproj.user/
+.ipynb_checkpoints/
 
 # Jupyter
 .ipynb_checkpoints/
@@ -9,14 +10,15 @@
 # Python cache
 __pycache__/
 *.pyc
+.venv/
+venv/
+*/.venv/
+*/venv/
 
 # macOS
 .DS_Store
 
 # Intermediate or bulky results
-DataAnalysis/Bootstrap/
-DataAnalysis/Subsampling/
-simulation_summary/thresholds/
 *.rds
 *.rdata
 *.xlsx

@@ -1,0 +1,178 @@
+,Run_ID,SHD,Error,n_latents
+0,1,,RecursionError: maximum recursion depth exceeded while calling a Python object,
+1,2,112.0,,6
+2,7,97.0,,8
+3,11,98.0,,3
+4,10,98.0,,9
+5,4,98.0,,9
+6,9,91.0,,5
+7,13,105.0,,10
+8,12,75.0,,8
+9,23,,RecursionError: maximum recursion depth exceeded while calling a Python object,
+10,5,111.0,,9
+11,16,105.0,,3
+12,6,103.0,,4
+13,27,,RecursionError: maximum recursion depth exceeded while calling a Python object,
+14,25,,RecursionError: maximum recursion depth exceeded while calling a Python object,
+15,15,100.0,,7
+16,32,,RecursionError: maximum recursion depth exceeded while calling a Python object,
+17,33,,RecursionError: maximum recursion depth exceeded while calling a Python object,
+18,19,95.0,,6
+19,20,103.0,,5
+20,22,101.0,,9
+21,21,117.0,,4
+22,29,97.0,,7
+23,31,95.0,,8
+24,24,98.0,,10
+25,26,102.0,,8
+26,30,95.0,,6
+27,35,105.0,,6
+28,37,105.0,,9
+29,40,99.0,,7
+30,41,93.0,,6
+31,38,106.0,,8
+32,46,100.0,,2
+33,45,100.0,,7
+34,42,111.0,,4
+35,44,93.0,,9
+36,48,98.0,,6
+37,51,113.0,,7
+38,54,107.0,,5
+39,53,114.0,,6
+40,67,,RecursionError: maximum recursion depth exceeded while calling a Python object,
+41,52,93.0,,9
+42,59,104.0,,8
+43,56,99.0,,7
+44,57,113.0,,10
+45,63,102.0,,7
+46,61,109.0,,8
+47,60,96.0,,9
+48,74,,RecursionError: maximum recursion depth exceeded while calling a Python object,
+49,65,100.0,,6
+50,64,88.0,,9
+51,70,101.0,,10
+52,69,107.0,,9
+53,71,102.0,,9
+54,68,108.0,,9
+55,73,107.0,,4
+56,75,90.0,,5
+57,78,105.0,,4
+58,80,90.0,,4
+59,77,96.0,,10
+60,79,108.0,,8
+61,76,85.0,,10
+62,81,93.0,,5
+63,91,,RecursionError: maximum recursion depth exceeded while calling a Python object,
+64,82,83.0,,5
+65,84,106.0,,6
+66,85,99.0,,7
+67,83,114.0,,9
+68,86,106.0,,6
+69,87,101.0,,10
+70,90,93.0,,9
+71,89,97.0,,7
+72,88,103.0,,10
+73,94,100.0,,5
+74,93,99.0,,7
+75,96,94.0,,8
+76,95,105.0,,9
+77,97,117.0,,2
+78,98,88.0,,10
+79,99,117.0,,8
+80,101,97.0,,10
+81,103,96.0,,6
+82,102,94.0,,9
+83,105,97.0,,10
+84,108,94.0,,6
+85,109,116.0,,6
+86,107,102.0,,8
+87,110,105.0,,7
+88,111,108.0,,7
+89,112,100.0,,10
+90,114,94.0,,7
+91,113,83.0,,7
+92,115,91.0,,7
+93,116,114.0,,4
+94,117,114.0,,4
+95,118,98.0,,7
+96,119,102.0,,9
+97,120,96.0,,7
+98,125,83.0,,8
+99,123,94.0,,6
+100,122,102.0,,8
+101,140,,RecursionError: maximum recursion depth exceeded while calling a Python object,
+102,126,103.0,,6
+103,128,100.0,,5
+104,131,116.0,,8
+105,149,,RecursionError: maximum recursion depth exceeded while calling a Python object,
+106,148,94.0,,7
+107,147,113.0,,5
+108,160,,RecursionError: maximum recursion depth exceeded while calling a Python object,
+109,154,,RecursionError: maximum recursion depth exceeded while calling a Python object,
+110,172,,RecursionError: maximum recursion depth exceeded while calling a Python object,
+111,170,,RecursionError: maximum recursion depth exceeded while calling a Python object,
+112,151,70.0,,6
+113,161,103.0,,7
+114,156,107.0,,10
+115,155,88.0,,8
+116,163,95.0,,10
+117,164,92.0,,6
+118,166,88.0,,10
+119,178,,RecursionError: maximum recursion depth exceeded while calling a Python object,
+120,171,106.0,,7
+121,165,83.0,,9
+122,174,89.0,,4
+123,173,117.0,,7
+124,183,,RecursionError: maximum recursion depth exceeded while calling a Python object,
+125,175,113.0,,6
+126,176,99.0,,9
+127,181,98.0,,5
+128,180,94.0,,10
+129,177,93.0,,7
+130,187,98.0,,5
+131,188,86.0,,6
+132,186,98.0,,7
+133,189,101.0,,9
+134,203,,RecursionError: maximum recursion depth exceeded while calling a Python object,
+135,191,99.0,,7
+136,205,,RecursionError: maximum recursion depth exceeded while calling a Python object,
+137,194,96.0,,8
+138,197,99.0,,5
+139,193,87.0,,7
+140,196,90.0,,8
+141,199,102.0,,5
+142,200,101.0,,5
+143,202,98.0,,10
+144,204,103.0,,9
+145,201,92.0,,8
+146,208,105.0,,5
+147,207,96.0,,4
+148,209,87.0,,8
+149,214,104.0,,7
+150,215,103.0,,10
+151,213,102.0,,5
+152,211,85.0,,8
+153,225,,RecursionError: maximum recursion depth exceeded while calling a Python object,
+154,218,106.0,,10
+155,219,106.0,,9
+156,223,105.0,,5
+157,222,98.0,,4
+158,221,97.0,,9
+159,224,104.0,,9
+160,227,87.0,,9
+161,239,,RecursionError: maximum recursion depth exceeded while calling a Python object,
+162,226,96.0,,6
+163,230,98.0,,9
+164,240,,RecursionError: maximum recursion depth exceeded while calling a Python object,
+165,229,112.0,,8
+166,246,,RecursionError: maximum recursion depth exceeded while calling a Python object,
+167,235,103.0,,10
+168,234,94.0,,6
+169,237,86.0,,7
+170,236,103.0,,5
+171,245,119.0,,4
+172,242,109.0,,10
+173,244,94.0,,8
+174,247,87.0,,8
+175,248,109.0,,7
+176,250,106.0,,2
